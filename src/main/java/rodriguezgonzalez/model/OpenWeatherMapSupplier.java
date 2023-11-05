@@ -44,7 +44,7 @@ public class OpenWeatherMapSupplier implements WeatherSupplier{
                 JsonObject jsonObject1 = (JsonObject) arrayObject.get(i);
 
                 String popString = jsonObject1.get("pop").toString();
-                int pop = Integer.parseInt(popString);
+                double pop = Double.parseDouble(popString);
                 JsonObject windJson = jsonObject1.getAsJsonObject("wind");
                 String windString = windJson.get("speed").toString();
                 double windSpeed = Double.parseDouble(windString);
@@ -53,8 +53,11 @@ public class OpenWeatherMapSupplier implements WeatherSupplier{
                 double temp = Double.parseDouble(tempString);
                 String humidityString = mainJson.get("humidity").toString();
                 int humidity = Integer.parseInt(humidityString);
+                JsonObject cloudsJson = jsonObject1.getAsJsonObject("clouds");
+                String cloudsString = cloudsJson.get("all").toString();
+                int clouds = Integer.parseInt(cloudsString);
 
-                Weather weather = new Weather(ts, pop, windSpeed, temp, humidity, location);
+                Weather weather = new Weather(ts, pop, windSpeed, temp, humidity, clouds, location);
                 return weather;
             }
         }

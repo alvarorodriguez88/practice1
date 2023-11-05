@@ -4,18 +4,20 @@ import java.time.Instant;
 
 public class Weather {
     private Instant ts;
-    private int pop;
+    private double pop;
     private double windSpeed;
     private double temp;
     private int humidity;
+    private int clouds;
     private Location location;
 
-    public Weather(Instant ts, int pop, double windSpeed, double temp, int humidity, Location location) {
+    public Weather(Instant ts, double pop, double windSpeed, double temp, int humidity, int clouds, Location location) {
         this.ts = ts;
         this.pop = pop;
         this.windSpeed = windSpeed;
         this.temp = temp;
         this.humidity = humidity;
+        this.clouds = clouds;
         this.location = location;
     }
 
@@ -23,7 +25,7 @@ public class Weather {
         return ts;
     }
 
-    public int getPop() {
+    public double getPop() {
         return pop;
     }
 
@@ -41,5 +43,9 @@ public class Weather {
 
     public Location getLocation() {
         return location;
+    }
+
+    public int getClouds() {
+        return clouds;
     }
 }
