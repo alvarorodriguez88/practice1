@@ -6,14 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherController {
-    private String apiKey;
-    private OpenWeatherMapSupplier supplier;
-    private List<Location> locations;
     public WeatherController() {
 
     }
-    public void init() throws IOException {
-        SQLiteWeatherStore sqlite = new SQLiteWeatherStore();
+    public void execute() throws IOException {
         List<Location> locations = new ArrayList<Location>() {{
             add(new Location(27.976897166863406, -15.581220101642044, "Gran_Canaria"));
             add(new Location(28.573841603162755, -13.976919911584199, "Fuerteventura"));
@@ -28,6 +24,7 @@ public class WeatherController {
         openWeatherMapSupplier.findKey();
         for (Location loc : locations){
             ArrayList<Weather> weathers = openWeatherMapSupplier.getWeather(loc);
+            SQLiteWeatherStore sqlite = new SQLiteWeatherStore(weathers);
             sqlite.save(weathers);
         }
     }

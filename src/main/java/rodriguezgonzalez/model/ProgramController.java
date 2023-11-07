@@ -16,19 +16,22 @@ public class ProgramController {
             public void run() {
                 WeatherController controller = new WeatherController();
                 try {
-                    controller.init();
+                    controller.execute();
                     System.out.println("Se acaba de hacer jeje...");
                 } catch (IOException e) {
                     System.out.println("ERROR: " + e);
                 }
             }
         };
-        //long interval = 1000 * 60 * 60 * 3;
-        long interval = 1000 * 60 * 5;
+        long interval = 1000 * 60 * 60 * 6;
         timer.schedule(task, 0, interval);
     }
 
     public void stop() {
         timer.cancel();
+    }
+    public void removeDB(){
+        WeatherController controller = new WeatherController();
+        controller.remove();
     }
 }
