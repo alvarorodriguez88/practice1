@@ -3,17 +3,19 @@ package rodriguezgonzalez.control;
 import rodriguezgonzalez.model.*;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        //SQLiteWeatherStore.connect("./example.db");
-        SQLiteWeatherStore sqlite = new SQLiteWeatherStore();
-        Location location = new Location(28.031901645086513, -15.498588169655084, "Gran_Canaria");
-        Instant ts = Instant.now();
-        OpenWeatherMapSupplier openWeatherMapSupplier = new OpenWeatherMapSupplier("a30482732a67c586a31137c790f955fd");
-        Weather weather = openWeatherMapSupplier.getWeather(location, ts);
-        //sqlite.save(weather);
-        System.out.println(weather.getClouds());
+        ProgramController controller = new ProgramController();
+        controller.start();
+        try {
+            Thread.sleep(1000 * 60 * 60 * 24);
+        } catch (InterruptedException e) {
+            System.out.println("ERROR: " + e);
+        }
+
+        controller.stop();
     }
 }

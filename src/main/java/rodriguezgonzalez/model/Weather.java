@@ -3,7 +3,7 @@ package rodriguezgonzalez.model;
 import java.time.Instant;
 
 public class Weather {
-    private Instant ts;
+    private String ts;
     private double pop;
     private double windSpeed;
     private double temp;
@@ -11,7 +11,7 @@ public class Weather {
     private int clouds;
     private Location location;
 
-    public Weather(Instant ts, double pop, double windSpeed, double temp, int humidity, int clouds, Location location) {
+    public Weather(String ts, double pop, double windSpeed, double temp, int humidity, int clouds, Location location) {
         this.ts = ts;
         this.pop = pop;
         this.windSpeed = windSpeed;
@@ -21,7 +21,7 @@ public class Weather {
         this.location = location;
     }
 
-    public Instant getTs() {
+    public String getTs() {
         return ts;
     }
 

@@ -2,7 +2,8 @@ package rodriguezgonzalez.model;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public interface WeatherSupplier {
-    Weather getWeather(Location location, Instant ts) throws IOException;
+    ArrayList<Weather> getWeather(Location location) throws IOException;
 }

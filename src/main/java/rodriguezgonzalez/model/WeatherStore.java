@@ -4,9 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public interface WeatherStore {
-    void save(Weather weather) throws RuntimeException;
+    void save(ArrayList<Weather> weathers) throws RuntimeException;
 
     String get(Location location, Instant ts);
 }
