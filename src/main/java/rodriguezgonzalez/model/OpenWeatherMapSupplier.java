@@ -6,11 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,6 @@ public class OpenWeatherMapSupplier implements WeatherSupplier{
     private List<Weather> weathers;
 
     public OpenWeatherMapSupplier(String filePath) throws IOException {
-        //TODO implementar como leer el archivo en el que está la apiKey.
         this.filePath = filePath;
         this.weathers = new ArrayList<>();
     }

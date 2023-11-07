@@ -56,9 +56,7 @@ public class SQLiteWeatherStore implements WeatherStore{
                     ", clouds = " + weather.getClouds() +
                     ", windSpeed = " + weather.getWindSpeed() +
                     " WHERE Date = '" + weather.getTs() + "';";
-
             statement.execute(query);
-            System.out.println("Table " + weather.getLocation().getIsla() + " updated");
         }
     }
 
