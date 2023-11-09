@@ -5,15 +5,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public class SQLiteWeatherStore implements WeatherStore {
-    public SQLiteWeatherStore(ArrayList<Weather> weathers) {
-        String dbPath = "./Tiempo_Canarias.db";
-        try (Connection connection = connect(dbPath)) {
-            Statement statement = connection.createStatement();
-            createTable(statement, weathers);
+    public SQLiteWeatherStore() {
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    }
+    public void initTables(Statement statement, ArrayList<Weather> weathers) throws SQLException {
+        //createDB(statement);
+        createTable(statement, weathers);
     }
 
     private static void delete(Statement statement, String tableName, String register) throws SQLException {
@@ -22,7 +19,9 @@ public class SQLiteWeatherStore implements WeatherStore {
         preparedStatement.setString(1, register);
         preparedStatement.executeUpdate();
     }
-
+    private static void createDB(Statement statement) throws SQLException {
+        statement.execute("CREATE DATABASE Tiempo_Canarias;");
+    }
 
     private static void createTable(Statement statement, ArrayList<Weather> weathers) throws SQLException {
         for (Weather weather : weathers){
@@ -46,9 +45,14 @@ public class SQLiteWeatherStore implements WeatherStore {
 
     public static void insert(Statement statement, ArrayList<Weather> weathers) throws SQLException {
         for (Weather weather : weathers) {
-            statement.execute("INSERT INTO " + weather.getLocation().getIsla() + " (date, temperature, precipitation, humidity, clouds, windSpeed)\n" +
-                    "SELECT " + weather.getTs() + ", " + weather.getTemp() + ", " + weather.getPop() + ", " + weather.getHumidity() + ", " + weather.getClouds() + ", " + weather.getWindSpeed() +
-                    " WHERE NOT EXISTS (SELECT 1 FROM " + weather.getLocation().getIsla() + " WHERE date = " + weather.getTs() + ");");
+            try {
+                statement.execute("INSERT INTO " + weather.getLocation().getIsla() + " (date, temperature, precipitation, humidity, clouds, windSpeed)\n" +
+                        "SELECT " + weather.getTs() + ", " + weather.getTemp() + ", " + weather.getPop() + ", " + weather.getHumidity() + ", " + weather.getClouds() + ", " + weather.getWindSpeed() +
+                        " WHERE NOT EXISTS (SELECT 1 FROM " + weather.getLocation().getIsla() + " WHERE date = " + weather.getTs() + ");");
+                System.out.println("Se agregó un nuevo registro en " + weather.getLocation().getIsla());
+            } catch (SQLException e){
+                System.out.println("ERROR: " + e);
+            }
         }
     }
 
@@ -66,11 +70,13 @@ public class SQLiteWeatherStore implements WeatherStore {
     }
 
 
-    public static Connection connect(String dbPath) {
+    public Connection connect(String dbPath) {
         Connection conn = null;
         try {
+            //TODO hacer archivo para poner dbPath y leerlo
             String url = "jdbc:sqlite:" + dbPath;
             conn = DriverManager.getConnection(url);
+            System.out.println("Conexion");
             return conn;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -79,15 +85,9 @@ public class SQLiteWeatherStore implements WeatherStore {
     }
 
     @Override
-    public void save(ArrayList<Weather> weathers) throws RuntimeException {
-        try (Connection connection = connect("./Tiempo_Canarias.db")) {
-            Statement statement = connection.createStatement();
-            update(statement, weathers);
-            insert(statement, weathers);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void save(Statement statement, ArrayList<Weather> weathers) throws SQLException {
+        update(statement, weathers);
+        insert(statement, weathers);
     }
 
     @Override

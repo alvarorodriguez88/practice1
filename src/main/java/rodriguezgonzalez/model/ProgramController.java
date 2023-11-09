@@ -23,15 +23,11 @@ public class ProgramController {
                 }
             }
         };
-        long interval = 1000 * 60 * 60 * 6;
+        long interval = 1000 * 60 * 20;
         timer.schedule(task, 0, interval);
     }
 
     public void stop() {
         timer.cancel();
-    }
-    public void removeDB(){
-        WeatherController controller = new WeatherController();
-        controller.remove();
     }
 }

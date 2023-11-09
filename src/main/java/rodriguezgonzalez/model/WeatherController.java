@@ -2,8 +2,13 @@ package rodriguezgonzalez.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.management.remote.JMXConnectorFactory.connect;
 
 public class WeatherController {
     public WeatherController() {
@@ -20,12 +25,21 @@ public class WeatherController {
             add(new Location(27.74369055621178, -17.99302465337035, "El_Hierro"));
             add(new Location(28.741658780092063, -17.86465798737256, "La_Palma"));
         }};
-        OpenWeatherMapSupplier openWeatherMapSupplier = new OpenWeatherMapSupplier("./apiKey.txt");
-        openWeatherMapSupplier.findKey();
-        for (Location loc : locations){
-            ArrayList<Weather> weathers = openWeatherMapSupplier.getWeather(loc);
-            SQLiteWeatherStore sqlite = new SQLiteWeatherStore(weathers);
-            sqlite.save(weathers);
+        OpenWeatherMapSupplier openWeatherMapSupplier = new OpenWeatherMapSupplier(new File("src/main/resources/Tiempo_Canarias.db"));
+        openWeatherMapSupplier.findKey(new File("src/main/resources/apiKey.txt"));
+        String dbPath = openWeatherMapSupplier.findDB(new File("src/main/resources/Tiempo_Canarias.txt"));
+        SQLiteWeatherStore sqlite = new SQLiteWeatherStore();
+        try (Connection connection = sqlite.connect(dbPath)) {
+            Statement statement = connection.createStatement();
+
+            for (Location loc : locations) {
+                ArrayList<Weather> weathers = openWeatherMapSupplier.getWeather(loc);
+                sqlite.initTables(statement, weathers);
+                sqlite.save(statement, weathers);
+                System.out.println("Se actualizó " + loc.getIsla());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

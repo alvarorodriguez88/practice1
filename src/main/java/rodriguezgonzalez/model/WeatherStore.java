@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public interface WeatherStore {
-    void save(ArrayList<Weather> weathers) throws RuntimeException;
+    void save(Statement statement, ArrayList<Weather> weathers) throws RuntimeException, SQLException;
 
     String get(Location location, Instant ts);
 }
